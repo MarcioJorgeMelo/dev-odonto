@@ -1,3 +1,4 @@
+import { Clinics } from "./_components/clinics";
 import { Header } from "./_components/header";
 import { Hero } from "./_components/hero";
 
@@ -8,6 +9,8 @@ export default function Home() {
 
       <div>
         <Hero />
+
+        <Clinics />
       </div>
     </div>
   );
