@@ -8,7 +8,7 @@ interface GetUserDataProps {
 
 export async function getUserData({ userId }: GetUserDataProps) {
   try {
-    if (userId) {
+    if (!userId) {
       return null;
     }
 
