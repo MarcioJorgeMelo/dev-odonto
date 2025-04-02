@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import getSession from "@/lib/getSession";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -47,6 +48,8 @@ export async function updateProfile(formData: FormSchema) {
         times: formData.times || [],
       },
     });
+
+    revalidatePath("/dashboard/profile");
 
     return {
       data: "Clínica atualizada com sucesso!",
