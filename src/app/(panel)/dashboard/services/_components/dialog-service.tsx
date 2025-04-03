@@ -24,13 +24,25 @@ import { createNewService } from "../_actions/create-service";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { updateService } from "../_actions/update-service";
 
 interface DialogServiceProps {
   closeModal: () => void;
+  serviceId?: string;
+  initialValues?: {
+    name: string;
+    price: string;
+    hours: string;
+    minutes: string;
+  };
 }
 
-export function DialogService({ closeModal }: DialogServiceProps) {
-  const form = UseDialogServiceForm();
+export function DialogService({
+  closeModal,
+  initialValues,
+  serviceId,
+}: DialogServiceProps) {
+  const form = UseDialogServiceForm({ initialValues: initialValues });
 
   const [loading, setLoading] = useState(false);
 
@@ -44,6 +56,19 @@ export function DialogService({ closeModal }: DialogServiceProps) {
     const minutes = parseInt(formData.minutes) || 0;
 
     const duration = hours * 60 + minutes;
+
+    if (serviceId) {
+      await editServiceById({
+        name: formData.name,
+        priceInCents: priceInCents,
+        duration: duration,
+        serviceId: serviceId,
+      });
+
+      setLoading(false);
+
+      return;
+    }
 
     const response = await createNewService({
       name: formData.name,
@@ -61,6 +86,32 @@ export function DialogService({ closeModal }: DialogServiceProps) {
     toast.success("Serviço cadastrado com sucesso!");
     handleCloseModal();
     router.refresh();
+  }
+
+  async function editServiceById({
+    serviceId,
+    name,
+    priceInCents,
+    duration,
+  }: {
+    serviceId: string;
+    name: string;
+    priceInCents: number;
+    duration: number;
+  }) {
+    const response = await updateService({
+      name: name,
+      price: priceInCents,
+      duration: duration,
+      serviceId: serviceId,
+    });
+
+    if (response.error) {
+      toast.error(response.error);
+    }
+
+    toast.success(response.data);
+    handleCloseModal();
   }
 
   function handleCloseModal() {
@@ -85,9 +136,15 @@ export function DialogService({ closeModal }: DialogServiceProps) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Novo serviço</DialogTitle>
+        <DialogTitle>
+          {serviceId ? "Editar serviço" : "Novo serviço"}
+        </DialogTitle>
 
-        <DialogDescription>Adicione um novo serviço</DialogDescription>
+        <DialogDescription>
+          {serviceId
+            ? "Edite um serviço cadastrado"
+            : "Adicione um novo serviço"}
+        </DialogDescription>
       </DialogHeader>
 
       <Form {...form}>
@@ -172,7 +229,9 @@ export function DialogService({ closeModal }: DialogServiceProps) {
             className="w-full font-semibold text-white"
             disabled={loading}
           >
-            {loading ? "Cadastrando..." : "Adicionar serviço"}
+            {loading
+              ? "Carregando..."
+              : `${serviceId ? "Atualizar serviço" : "Cadastrar serviço"}`}
           </Button>
         </form>
       </Form>
