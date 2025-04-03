@@ -27,7 +27,6 @@ export async function getUserData({ userId }: GetUserDataProps) {
 
     return user;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
