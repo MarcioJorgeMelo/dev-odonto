@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +37,8 @@ import { Prisma } from "@prisma/client";
 import { updateProfile } from "../_actions/update-profile";
 import { toast } from "sonner";
 import { formatPhone } from "@/utils/formatPhone";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: {
@@ -58,10 +59,14 @@ export function ProfileContent({ user }: ProfileContentProps) {
     timeZone: user.timezone,
   });
 
+  const router = useRouter();
+
   const [selectedHours, setSelectedHours] = useState<string[]>(
     user.times ?? []
   );
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  const { update } = useSession();
 
   function generateTimeSlots(): string[] {
     const hours: string[] = [];
@@ -116,6 +121,13 @@ export function ProfileContent({ user }: ProfileContentProps) {
     }
 
     toast.success(response.data);
+  }
+
+  async function handleLogout() {
+    await signOut();
+    await update();
+
+    router.replace("/");
   }
 
   return (
@@ -339,6 +351,12 @@ export function ProfileContent({ user }: ProfileContentProps) {
           </Card>
         </form>
       </Form>
+
+      <section className="mt-4">
+        <Button variant="destructive" onClick={handleLogout}>
+          Sair da conta
+        </Button>
+      </section>
     </div>
   );
 }
