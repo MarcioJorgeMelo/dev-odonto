@@ -112,7 +112,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
       status: values.status === "Ativo" ? true : false,
       timeZone: values.timeZone,
       phone: values.phone,
-      times: timeZones,
+      times: selectedHours || [],
     });
 
     if (response.error) {
