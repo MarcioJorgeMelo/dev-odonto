@@ -27,3 +27,26 @@ export function isSlotInThePast(slotTime: string) {
 
   return false;
 }
+
+export function isSlotSequenceAvailable(
+  startSlot: string,
+  requiredSlots: number,
+  allSlots: string[],
+  blockedSlots: string[]
+) {
+  const startIndex = allSlots.indexOf(startSlot);
+
+  if (startIndex === -1 || startIndex + requiredSlots > allSlots.length) {
+    return false;
+  }
+
+  for (let i = startIndex; i < startIndex + requiredSlots; i++) {
+    const slotTime = allSlots[i];
+
+    if (blockedSlots.includes(slotTime)) {
+      return false;
+    }
+  }
+
+  return true;
+}
