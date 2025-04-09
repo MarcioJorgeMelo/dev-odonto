@@ -27,6 +27,8 @@ import {
 import { useCallback, useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { ScheduleTimeList } from "./shedule-time-list";
+import { createNewAppointment } from "../_actions/create-appointment";
+import { toast } from "sonner";
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -99,7 +101,27 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
   }, [selectedDate, clinic.times, fetchBlockedTimes, selectedTime]);
 
   async function handleRegisterSchedule(formData: ScheduleFormData) {
-    console.log(formData);
+    if (!selectedTime) {
+      return;
+    }
+
+    const response = await createNewAppointment({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      date: formData.date,
+      time: selectedTime,
+      serviceId: formData.serviceId,
+      clinicId: clinic.id,
+    });
+
+    if (response.error) {
+      toast.error("Erro ao realizar agendamento.");
+    }
+
+    toast.success("Agendamento realizado!");
+    form.reset();
+    setSelectedTime("");
   }
 
   return (
@@ -141,7 +163,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="my-2">
+                <FormItem className="my-4">
                   <FormLabel className="font-bold">Nome completo:</FormLabel>
 
                   <FormControl>
@@ -161,7 +183,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="my-2">
+                <FormItem className="my-4">
                   <FormLabel className="font-bold">Email:</FormLabel>
 
                   <FormControl>
@@ -181,7 +203,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
               control={form.control}
               name="phone"
               render={({ field }) => (
-                <FormItem className="my-2">
+                <FormItem className="my-4">
                   <FormLabel className="font-bold">Telefone:</FormLabel>
 
                   <FormControl>
@@ -206,7 +228,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
               control={form.control}
               name="date"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-2 space-y-1">
+                <FormItem className="flex items-center gap-2 space-y-1 my-4">
                   <FormLabel className="font-bold">
                     Data do agendamento:
                   </FormLabel>
@@ -232,7 +254,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
               control={form.control}
               name="serviceId"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem className="my-4">
                   <FormLabel className="font-bold">
                     Selecione o serviço:
                   </FormLabel>
@@ -260,7 +282,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
             />
 
             {selectedServiceId && (
-              <div className="space-y-2">
+              <div className="space-y-2 my-4">
                 <Label className="font-semibold">Horários disponíveis:</Label>
 
                 <div className="bg-gray-100 p-4 rounded-lg">
