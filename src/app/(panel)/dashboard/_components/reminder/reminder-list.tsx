@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReminderContent } from "./reminder-content";
+import { useState } from "react";
 
 interface ReminderListProps {
   reminders: Reminder[];
@@ -24,6 +25,8 @@ interface ReminderListProps {
 
 export function ReminderList({ reminders }: ReminderListProps) {
   const router = useRouter();
+
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   async function handleDeleteReminder(id: string) {
     const response = await deleteReminder({ reminderId: id });
@@ -44,7 +47,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
             Lembretes
           </CardTitle>
 
-          <Dialog>
+          <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" className="w-9 p-0">
                 <Plus className="w-5 h-5" />
@@ -60,7 +63,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
                 </DialogDescription>
               </DialogHeader>
 
-              <ReminderContent />
+              <ReminderContent closeDialog={() => setDialogIsOpen(false)} />
             </DialogContent>
           </Dialog>
         </CardHeader>
