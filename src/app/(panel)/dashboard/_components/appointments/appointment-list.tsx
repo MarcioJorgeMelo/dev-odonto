@@ -39,6 +39,8 @@ export function AppointmentList({ times }: { times: string[] }) {
 
       return json;
     },
+    staleTime: 20000,
+    refetchInterval: 60000,
   });
 
   const occupantMap: Record<string, AppointmentWithService> = {};
@@ -85,10 +87,10 @@ export function AppointmentList({ times }: { times: string[] }) {
                     key={slot}
                     className="flex items-center py-2 border-t last:border-b"
                   >
-                    <div className="w-16 text-sm font-semibold">{slot}</div>
+                    <div className="w-16 text-sm font-bold">{slot}</div>
 
-                    <div className="flex-1 text-sm text-gray-500">
-                      <div className="font-semibold">{occupant.name}</div>
+                    <div className="flex-1 text-sm">
+                      <div className="font-bold">{occupant.name}</div>
 
                       <div className="text-sm text-gray-500">
                         {occupant.phone}
