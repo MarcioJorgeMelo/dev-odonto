@@ -4,6 +4,8 @@ import { Header } from "./_components/header";
 import { Hero } from "./_components/hero";
 import { getClinics } from "./_data-access/get-clinics";
 
+export const revalidate = 120;
+
 export default async function Home() {
   const clinics = await getClinics();
 
