@@ -3,8 +3,6 @@
 import prisma from "@/lib/prisma";
 
 export async function getReminders({ userId }: { userId: string }) {
-  console.log(userId);
-
   if (!userId) {
     return [];
   }
