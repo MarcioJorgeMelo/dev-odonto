@@ -2,6 +2,7 @@ import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GridPlans } from "./_components/grid-plans";
 import { getSubscription } from "@/utils/get-subscription";
+import { SubscriptionDetail } from "./_components/subscription-detail";
 
 export default async function Plans() {
   const session = await getSession();
@@ -17,7 +18,7 @@ export default async function Plans() {
       {subscription?.status !== "active" && <GridPlans />}
 
       {subscription?.status === "active" && (
-        <h1>Você tem 1 assinatura ativa</h1>
+        <SubscriptionDetail subscription={subscription!} />
       )}
     </div>
   );
