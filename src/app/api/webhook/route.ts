@@ -12,8 +12,6 @@ export const POST = async (request: Request) => {
     return NextResponse.error();
   }
 
-  console.log("Webhook iniciando");
-
   const text = await request.text();
 
   const event = stripe.webhooks.constructEvent(
@@ -65,7 +63,7 @@ export const POST = async (request: Request) => {
       break;
 
     default:
-      console.log("Evento não tratado: ", event.type);
+    // console.log("Evento não tratado: ", event.type);
   }
 
   revalidatePath("dashboard/plans");
