@@ -7,7 +7,7 @@ export type PlansProps = {
   PROFESSIONAL: PlanDetailProps;
 };
 
-export const PLANS: PlansProps = {
+export const PLANS_LIMITS: PlansProps = {
   BASIC: {
     maxServices: 3,
   },
@@ -24,7 +24,7 @@ export const subscriptionPlans = [
     oldPrice: "R$ 97,90",
     price: "R$ 27,90",
     features: [
-      `Até ${PLANS["BASIC"].maxServices} serviços`,
+      `Até ${PLANS_LIMITS["BASIC"].maxServices} serviços`,
       "Agendamentos ilimitados",
       "Suporte imediato",
       "Relatórios mensais",
@@ -37,7 +37,7 @@ export const subscriptionPlans = [
     oldPrice: "R$ 197,90",
     price: "R$ 97,90",
     features: [
-      `Até ${PLANS["PROFESSIONAL"].maxServices} serviços`,
+      `Até ${PLANS_LIMITS["PROFESSIONAL"].maxServices} serviços`,
       "Agendamentos ilimitados",
       "Suporte prioritário",
       "Relatórios mensais avançados",
