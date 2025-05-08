@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { Subscription } from "@prisma/client";
 import { Session } from "next-auth";
 import { getPlan } from "./get-plan";
-import { PLANS } from "../plans";
+import { PLANS_LIMITS } from "../plans";
 import { checkSubscriptionExpired } from "./checkSubscriptionExpired";
 import { ResultPermissionProps } from "./canPermission";
 
@@ -23,15 +23,13 @@ export async function canCreateService(
       const plan = subscription.plan;
       const planLimits = await getPlan(plan);
 
-      console.log("Limites do seu plano:", planLimits);
-
       return {
         hasPermission:
           planLimits.maxServices === null ||
           servicesCount < planLimits.maxServices,
         planId: subscription.plan,
         expired: false,
-        plan: PLANS[subscription.plan],
+        plan: PLANS_LIMITS[subscription.plan],
       };
     }
 
