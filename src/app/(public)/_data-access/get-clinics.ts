@@ -8,6 +8,9 @@ export async function getClinics() {
       where: {
         status: true,
       },
+      include: {
+        subscription: true,
+      },
     });
 
     return clinics;
