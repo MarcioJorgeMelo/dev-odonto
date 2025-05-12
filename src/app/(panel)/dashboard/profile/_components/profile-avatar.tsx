@@ -29,6 +29,12 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
       const newFile = new File([image], newFileName, { type: image.type });
 
       const urlImage = await uploadImage(newFile);
+
+      if (urlImage) {
+        setPreviewImage(urlImage);
+      }
+
+      setLoading(false);
     }
   }
 
@@ -57,7 +63,7 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
 
       toast("Imagem alterada com sucesso!");
 
-      return data as string;
+      return data.secure_url as string;
     } catch (error) {
       return null;
     }
