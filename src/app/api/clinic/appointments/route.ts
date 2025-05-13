@@ -70,4 +70,4 @@ export const GET = auth(async function (request) {
       }
     );
   }
-});
+}) as any;
